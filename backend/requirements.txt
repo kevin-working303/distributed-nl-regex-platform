@@ -1,0 +1,31 @@
+# --- Web / API ---
+Django==4.2.16
+djangorestframework==3.15.2
+django-cors-headers==4.4.0
+gunicorn==22.0.0
+psycopg2-binary==2.9.9
+
+# --- Async processing ---
+celery==5.3.6
+redis==5.0.8
+flower==2.0.1
+
+# --- Distributed data processing ---
+pyspark==3.5.1
+pyarrow==16.1.0
+numpy==1.26.4            # pin <2: pandas/pyarrow here are built against numpy 1.x
+pandas==2.0.3
+openpyxl==3.1.5          # Excel ingestion
+
+# --- Cloud / storage ---
+boto3==1.34.162
+
+# --- LLM ---
+anthropic==0.34.2
+
+# --- Security ---
+cryptography==43.0.1
+
+# --- Tests ---
+pytest==8.3.2
+pytest-django==4.8.0

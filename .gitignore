@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# Django
+*.sqlite3
+/backend/staticfiles/
+
+# Node
+node_modules/
+frontend/dist/
+
+# Data / results / spark
+/data/
+spark-warehouse/
+*.parquet
+derby.log
+metastore_db/
+
+# Env & secrets
+.env
+*.pem
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# The assessment brief (kept out of the repo)
+Web_Application_for_Regex_Pattern_Matching_and_Replacement.pdf

@@ -1,0 +1,9 @@
+# Caddy automatically provisions and renews a Let's Encrypt certificate for
+# $SITE_ADDRESS. Using a <public-ip>.nip.io hostname means you get real,
+# browser-trusted HTTPS with no domain purchase.
+#
+# Caddy -> frontend (nginx) which serves the SPA and proxies /api -> backend.
+{$SITE_ADDRESS} {
+	encode gzip
+	reverse_proxy frontend:80
+}

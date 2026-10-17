@@ -1,0 +1,54 @@
+# ---------------------------------------------------------------------------
+# Production override for a public VM (e.g. Oracle Cloud Always Free ARM).
+# Usage:
+#   SITE_ADDRESS=<your-public-ip>.nip.io docker compose \
+#       -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# Adds a Caddy reverse proxy that terminates TLS (automatic Let's Encrypt via
+# nip.io — no domain purchase needed) and fronts the app. Internal services are
+# no longer published on host ports; only 80/443 (Caddy) are exposed.
+# ---------------------------------------------------------------------------
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?set SITE_ADDRESS, e.g. 1.2.3.4.nip.io}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - frontend
+      - backend
+
+  # Internal-only in production (reached through Caddy → frontend → backend).
+  # `!reset []` CLEARS the base ports — a plain `ports: []` would be merged
+  # (appended) and leave the base host-port mappings in place.
+  frontend:
+    ports: !reset []
+
+  backend:
+    ports: !reset []
+    environment:
+      DJANGO_DEBUG: "0"
+      # Allow the public hostname + internal names.
+      DJANGO_ALLOWED_HOSTS: ${SITE_ADDRESS:-*},backend,localhost
+      CORS_ALLOWED_ORIGINS: https://${SITE_ADDRESS}
+
+  # Don't publish Postgres on the host in production.
+  postgres:
+    ports: !reset []
+
+  # Flower stays internal (no public port) — reach it via an SSH tunnel if needed:
+  #   ssh -L 5555:localhost:5555 user@vm
+  flower:
+    ports: !reset []
+
+volumes:
+  caddy-data:
+  caddy-config:
