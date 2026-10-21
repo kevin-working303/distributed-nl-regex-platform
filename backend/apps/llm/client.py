@@ -92,7 +92,10 @@ def call_claude(system: str, user: str) -> dict:
     client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
     response = client.messages.create(
         model=settings.LLM_MODEL,
-        max_tokens=1024,
+        # Headroom so reasoning-enabled models (e.g. DeepSeek V4) have room to
+        # think AND still emit the final JSON answer, rather than exhausting the
+        # budget mid-reasoning and returning empty content.
+        max_tokens=4096,
         system=system,
         messages=[{"role": "user", "content": user}],
     )
