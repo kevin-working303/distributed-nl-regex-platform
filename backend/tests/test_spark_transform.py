@@ -73,6 +73,42 @@ def test_standardize_rules(spark):
     assert matches == 1  # only row 2 changed
 
 
+def test_excel_ingestion_through_pipeline(spark):
+    """Mirrors spark_engine.load_dataframe's Excel branch: pandas reads the
+    .xlsx (dtype=str, like a real upload) and the result is converted to a
+    Spark DataFrame, then run through the same apply_transform used for CSV."""
+    pd = pytest.importorskip("pandas")
+    import io
+
+    source = pd.DataFrame(
+        {
+            "ID": ["1", "2", "3"],
+            "Name": ["John Doe", "Jane Smith", "Alice Brown"],
+            "Email": [
+                "john.doe@example.com",
+                "jane_smith@domain.com",
+                "alice.brown@website.org",
+            ],
+        }
+    )
+    buf = io.BytesIO()
+    source.to_excel(buf, index=False)
+    buf.seek(0)
+
+    pdf = pd.read_excel(buf, dtype=str).fillna("")
+    df = spark.createDataFrame(pdf)
+
+    spec = {
+        "operation": "replace",
+        "pattern": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}\b",
+    }
+    out, matches, rows = apply_transform(spark, df, spec, ["Email"], "REDACTED")
+    vals = {r["ID"]: r["Email"] for r in out.collect()}
+    assert vals == {"1": "REDACTED", "2": "REDACTED", "3": "REDACTED"}
+    assert matches == 3
+    assert rows == 3
+
+
 def test_missing_column_raises(spark):
     spec = {"operation": "replace", "pattern": r"x"}
     with pytest.raises(ValueError):
