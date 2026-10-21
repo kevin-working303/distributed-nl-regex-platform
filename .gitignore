@@ -33,3 +33,12 @@ metastore_db/
 
 # The assessment brief (kept out of the repo)
 Web_Application_for_Regex_Pattern_Matching_and_Replacement.pdf
+
+# Demo recordings / media artifacts (deliver via GitHub attachment or YouTube, not the repo)
+*.mp4
+*.mkv
+屏幕录制*
+captions.srt
+KEY.txt
+*secret*
+*credentials*.txt
