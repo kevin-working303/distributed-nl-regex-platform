@@ -22,6 +22,9 @@ boto3==1.34.162
 
 # --- LLM ---
 anthropic==0.34.2
+# anthropic 0.34.2 passes proxies= to httpx's client, which httpx>=0.28 removed;
+# pin httpx to a compatible version so the SDK client constructs correctly.
+httpx==0.27.2
 
 # --- Security ---
 cryptography==43.0.1

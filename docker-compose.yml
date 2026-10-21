@@ -22,6 +22,9 @@ x-backend-env: &backend-env
   SPARK_EXECUTOR_MEMORY: ${SPARK_EXECUTOR_MEMORY:-2g}
   SPARK_ROWS_PER_PARTITION: ${SPARK_ROWS_PER_PARTITION:-200000}
   ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+  # Optional: point the Anthropic SDK at any Anthropic-compatible endpoint
+  # (e.g. DeepSeek: https://api.deepseek.com/anthropic). Blank = real Anthropic.
+  ANTHROPIC_BASE_URL: ${ANTHROPIC_BASE_URL:-}
   LLM_MODEL: ${LLM_MODEL:-claude-sonnet-5}
   LLM_CACHE_TTL_SECONDS: ${LLM_CACHE_TTL_SECONDS:-86400}
   RESULTS_DIR: ${RESULTS_DIR:-/data/results}
