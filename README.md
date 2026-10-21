@@ -8,10 +8,22 @@ Built with **Django + DRF**, **Celery + Redis**, **PySpark**, an **LLM
 (Anthropic Claude)**, and a **React** frontend. The whole stack comes up with a
 single `docker compose up`.
 
-> **Demo video:** _add link here_ — shows connecting to S3 with user-entered
-> credentials and an asynchronous job running to completion.
 > **Live deployment:** https://134.199.151.81.nip.io
 > (Reviewers: connect with your own S3 bucket + credentials.)
+
+---
+
+## Demo
+
+[![Demo video — connecting to S3 and running async jobs](docs/demo_thumbnail.jpg)](https://github.com/kevin-working303/distributed-nl-regex-platform/releases/download/v1.0/demo_final.mp4)
+
+*Click the thumbnail to download/play the video.* It shows, in order: connecting
+to a real S3 bucket with user-entered credentials, an async **Replace** job
+redacting emails, an **Extract** job pulling the email domain into a new
+column, a **Standardize** job normalizing phone numbers via LLM-derived rules,
+and an LLM-powered partial in-cell mask (hides only the email username, keeps
+the domain) — each with live job status and a generated regex/ruleset shown in
+the UI.
 
 ---
 
